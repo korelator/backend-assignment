@@ -51,7 +51,8 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "type": "string"
+                  "type": "string",
+                  "format": "uuid"
                 }
               }
             }
@@ -120,7 +121,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "label": {
             "type": "string"
@@ -153,7 +155,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "answers": {
             "type": "array",
@@ -167,7 +170,8 @@
         "type": "object",
         "properties": {
           "fieldId": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
           },
           "value": {
             "type": "string"
