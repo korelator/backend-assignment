@@ -1,0 +1,179 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Form Editor API",
+    "description": "API for configuring and submitting forms",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/form/configuration": {
+      "get": {
+        "summary": "Get the form configuration",
+        "responses": {
+          "200": {
+            "description": "Returns the current form configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormConfiguration"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Update the form configuration",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormConfiguration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Form configuration updated"
+          }
+        }
+      }
+    },
+    "/form/fields/order": {
+      "put": {
+        "summary": "Change the order of fields",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Field order updated"
+          }
+        }
+      }
+    },
+    "/form/submissions": {
+      "get": {
+        "summary": "Get all form submissions",
+        "responses": {
+          "200": {
+            "description": "Returns all submitted forms",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormSubmission"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Submit a filled-out form",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FormSubmission"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Form submitted successfully"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FormConfiguration": {
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormField"
+            }
+          }
+        }
+      },
+      "FormField": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "text",
+              "select"
+            ]
+          },
+          "minLength": {
+            "type": "integer",
+            "nullable": true
+          },
+          "maxLength": {
+            "type": "integer",
+            "nullable": true
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        }
+      },
+      "FormSubmission": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormAnswer"
+            }
+          }
+        }
+      },
+      "FormAnswer": {
+        "type": "object",
+        "properties": {
+          "fieldId": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
