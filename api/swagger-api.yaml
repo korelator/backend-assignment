@@ -28,28 +28,34 @@ paths:
 
   /form/fields:
     post:
-      summary: Add a new field to the form configuration
+      summary: Add new fields to the form configuration
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/FormField'
+              type: array
+              items:
+                $ref: '#/components/schemas/FormField'
       responses:
         "201":
-          description: Field added successfully
+          description: Fields added successfully
     delete:
-      summary: Delete a field from the form configuration
+      summary: Delete fields from the form configuration
       parameters:
-        - name: fieldId
+        - name: fieldIds
           in: query
           required: true
           schema:
-            type: string
-            format: uuid
+            type: array
+            items:
+              type: string
+              format: uuid
+          style: form
+          explode: true
       responses:
         "200":
-          description: Field deleted successfully
+          description: Fields deleted successfully
 
   /form/fields/order:
     put:
