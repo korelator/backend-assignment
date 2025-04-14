@@ -37,29 +37,3 @@ CREATE TABLE form_answer (
 -- Indexes for performance
 CREATE INDEX idx_form_field_position ON form_field(position);
 CREATE INDEX idx_form_answer_submission ON form_answer(submission_id);
-
--- Trigger to ensure form_field has corresponding form_field_text or form_field_select entry
-CREATE FUNCTION check_field_type_match() RETURNS trigger AS $$
-BEGIN
-  IF NEW.type = 'text' THEN
-    IF NOT EXISTS (SELECT 1 FROM form_field_text WHERE field_id = NEW.id) THEN
-      RAISE EXCEPTION 'check_field_type_match - Text field must have form_field_text entry';
-END IF;
-    IF EXISTS (SELECT 1 FROM form_field_select WHERE field_id = NEW.id) THEN
-      RAISE EXCEPTION 'check_field_type_match - Text field must not have form_field_select entry';
-END IF;
-  ELSIF NEW.type = 'select' THEN
-    IF NOT EXISTS (SELECT 1 FROM form_field_select WHERE field_id = NEW.id) THEN
-      RAISE EXCEPTION 'check_field_type_match - Select field must have form_field_select entry';
-END IF;
-    IF EXISTS (SELECT 1 FROM form_field_text WHERE field_id = NEW.id) THEN
-      RAISE EXCEPTION 'check_field_type_match - Select field must not have form_field_text entry';
-END IF;
-END IF;
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_check_field_type_match
-    AFTER INSERT OR UPDATE ON form_field
-                        FOR EACH ROW EXECUTE FUNCTION check_field_type_match();
